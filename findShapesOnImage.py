@@ -114,13 +114,8 @@ tolerances = [
 ]
 
 # Load the image where you want to find these colors
-# target_image = cv2.imread('longTest2.jpg')
-# target_image = cv2.imread('longTest.jpg')
-# target_image = cv2.imread('shortTest.jpg')
-# target_image = cv2.imread('data/long/2e639843.jpg')
-# file_path = 'data/long/light/lightLong21.jpg'
 # file_path = 'data/short/light/lightShort8.jpg'
-file_path = 'data/downloaded_images/Landscape/light/light32.jpg'
+file_path = 'data/downloaded_images/Landscape/light/light3.jpg'
 base_name = os.path.basename(file_path)
 file_name, _ = os.path.splitext(base_name)
 
@@ -178,18 +173,6 @@ cv2.drawContours(combined_contour_image, contours_green, -1, (0, 255, 0), 1)
 # Display the combined contour image
 display_image(combined_contour_image, file_name, 'Combined Red and Green Contours', save_image=False)
 
-# # Function to check if one contour is above another within a given distance
-# def is_above_within_distance(above_contour, below_contour, max_distance=200):
-#     _, y_above, _, h_above = cv2.boundingRect(above_contour)
-#     x_below, y_below, w_below, _ = cv2.boundingRect(below_contour)
-
-#     # The bottom edge of the 'above' contour
-#     bottom_above = y_above + h_above
-
-#     # Check if the 'above' contour is indeed above the 'below' contour and within max_distance
-#     if bottom_above < y_below and (y_below - bottom_above) <= max_distance:
-#         return True
-#     return False
 
 # Combine red and green contours for processing
 all_contours = contours_red + contours_green
@@ -306,10 +289,6 @@ assert all(isinstance(idx, int) for idx in additional_contours), "additional_con
 # Combine the indices from vertically aligned contours with additional contours
 final_indices = set(vertically_aligned_indices + list(additional_contours))
 final_indices = sorted(final_indices)  # Now final_indices should only contain integers, which can be sorted
-
-# # Combine the indices from vertically aligned pairs and additional contours
-# final_indices = set(index for pair in vertically_aligned_pairs for index in pair) | set(additional_contours)
-# final_indices = sorted(final_indices)  # Sort to maintain order
 
 # Draw the final contours
 final_contours_image = np.zeros_like(target_image)
