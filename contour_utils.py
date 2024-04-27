@@ -98,6 +98,9 @@ def classify_long_short_or_unknown(contours, image):
 
     if not red_contours or not green_contours:
         return "unknown"
+    
+    print("RED", red_contours)
+    print("GREEN", green_contours)
 
     # Determine vertical position
     red_top = min(cv2.boundingRect(c)[1] for c in red_contours)
@@ -107,4 +110,41 @@ def classify_long_short_or_unknown(contours, image):
         return "short"
     elif green_top < red_top:
         return "long"
+    return "unknown"
+
+def classify_long_short_or_unknown_black_background(contours, image):
+    red_contours = []
+    green_contours = []
+
+    # Adjust tolerance for considering red or green dominance
+    color_threshold = 20  # Adjust as needed
+    
+    for contour in contours:
+        # Create a mask to get the mean color of the contour
+        mask = np.zeros_like(image[:, :, 0], dtype=np.uint8)  # Only need 1 channel for the mask
+        cv2.drawContours(mask, [contour], -1, 255, -1)
+        
+        # Compute the mean color
+        mean_color = cv2.mean(image, mask=mask)
+        
+        # Consider pixels only above a certain brightness level to avoid black influences
+        if mean_color[2] > mean_color[1] + color_threshold:
+            red_contours.append(contour)
+        elif mean_color[1] > mean_color[2] + color_threshold:
+            green_contours.append(contour)
+    
+    # Validate that there are at least one red and one green contour
+    if not red_contours or not green_contours:
+        return "unknown"
+
+    # Determine the topmost position for red and green contours
+    red_topmost = min(cv2.boundingRect(c)[1] for c in red_contours)
+    green_topmost = min(cv2.boundingRect(c)[1] for c in green_contours)
+    
+    # Classify based on the vertical position
+    if red_topmost < green_topmost:
+        return "short"
+    elif green_topmost < red_topmost:
+        return "long"
+    
     return "unknown"

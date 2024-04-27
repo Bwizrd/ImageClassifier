@@ -1,7 +1,7 @@
 import os
 
 # Define the folder containing the files to be renamed
-folder_path = 'data/downloaded_images/Landscape/light/'
+folder_path = 'data/downloaded_images/Landscape/dark/'
 
 # Initialize a counter for the sequential numbering
 counter = 1
@@ -12,7 +12,7 @@ for filename in os.listdir(folder_path):
     file_extension = os.path.splitext(filename)[1]
 
     # Define the new filename with a unique number
-    new_filename = f"light{counter}{file_extension}"
+    new_filename = f"dark{counter}{file_extension}"
 
     # Get the full paths for the original and new filenames
     old_path = os.path.join(folder_path, filename)
