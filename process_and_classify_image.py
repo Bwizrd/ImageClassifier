@@ -360,19 +360,19 @@ def draw_rectangles(image, contours_with_corners):
 
 
 # Function to calculate if the contour fills enough of the rectangle area
-def is_contour_filling_rectangle(contour, rectangle_area, minimum_fill_ratio=0.7):
+def is_contour_filling_rectangle(contour, rectangle_area, minimum_fill_ratio=0.5):
     contour_area = cv2.contourArea(contour)
     fill_ratio = contour_area / rectangle_area
     return fill_ratio >= minimum_fill_ratio
 
 # Function to approximate and trim contours to remove extremities
-def simplify_contour(contour, epsilon=0.05):
+def simplify_contour(contour, epsilon=0.01):
     """
     Approximate the contour to remove extremities and smooth it.
     """
     return cv2.approxPolyDP(contour, epsilon * cv2.arcLength(contour, True), True)
 
-def filter_rectangular_contours(contours_with_corners, minimum_fill_ratio=0.7):
+def filter_rectangular_contours(contours_with_corners, minimum_fill_ratio=0.4):
     valid_contours = []
 
     # Sort contours by their top-left corner's x-coordinate to detect nesting
@@ -486,7 +486,7 @@ def remove_nested_rectangles(contours_with_corners):
 
     return filtered_contours
 
-def find_similar_width_and_aligned_edges(matched_pairs, width_tolerance=20, x_axis_tolerance=10):
+def find_similar_width_and_aligned_edges(matched_pairs, width_tolerance=1000, x_axis_tolerance=1000):
     aligned_contours = []
 
     for contour_pair in matched_pairs:
@@ -1049,18 +1049,14 @@ def process_and_classify_image(image_path):
         return position
 
 
-# Command-line interface
 if __name__ == "__main__":
-    # Use argparse to parse command-line arguments
     parser = argparse.ArgumentParser(
         description="Process an image to classify it as 'long', 'short', or 'unknown'.")
     parser.add_argument("image_path", type=str,
                         help="Path to the image to be processed.")
 
-    # Parse the arguments
     args = parser.parse_args()
 
-    # Process and classify the image based on the provided image path
     result = process_and_classify_image(args.image_path)
 
-    print(result)  # Output the result to the console
+    print(result)

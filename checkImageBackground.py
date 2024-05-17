@@ -23,7 +23,7 @@ def check_background_color(image):
         return "Mixed"
 
 # Define the folder containing the image files
-folder_path = 'data/downloaded_images/Landscape'
+folder_path = 'data/downloaded_images/landscape'
 
 # Define paths to light and dark subfolders
 light_folder = os.path.join(folder_path, 'light')
